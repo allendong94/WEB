@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>HW8 - Place Search</title>
+
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<!-- font awesome -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>	
+
+	<link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+	<div class="container">
+		<div id="search-box" class="jumbotron mt-4 p-3">
+			<form action="" novalidate>
+				<h4 class="mb-4 text-center">Travel and Entertainment Search</h4>
+				<div class="form-group row">
+					<label for="input-keyword" class="col-sm-2 offset-sm-2 col-form-label req">Keyword</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="input-keyword" autofocus>
+						<div class="error d-none">Please enter a keyword</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="input-category" class="col-sm-2 offset-sm-2 col-form-label">Category</label>
+					<div class="col-sm-4">
+						<select class="form-control" id="input-category">
+							<option value="default">Default</option>
+							<option value="airport">Airport</option>
+							<option value="amusement_park">Amusement Park</option>
+							<option value="aquarium">Aquarium</option>
+							<option value="art_gallery">Art Gallery</option>
+							<option value="bakery">Bakery</option>
+							<option value="bar">Bar</option>
+							<option value="beauty_salon">Beauty Salon</option>
+							<option value="bowling_alley">Bowling Alley</option>
+							<option value="bus_station">Bus Station</option>
+							<option value="cafe">Cafe</option>
+							<option value="campground">Campground</option>	<option value="car_rental">Car Rental</option>
+							<option value="casino">Casino</option>
+							<option value="lodging">Lodging</option>
+							<option value="movie_theater">Movie Theater</option>
+							<option value="museum">Museum</option>
+							<option value="night_club">Night Club</option>
+							<option value="park">Park</option>
+							<option value="parking">Parking</option>
+							<option value="restaurant">Restaurant</option>
+							<option value="shopping_mall">Shopping Mall</option>
+							<option value="stadium">Stadium</option>
+							<option value="subway_station">Subway Station</option>
+							<option value="taxi_stand">Taxi Stand</option>
+							<option value="train_station">Train Station</option>
+							<option value="transit_station">Transit Station</option>
+							<option value="travel_agency">Travel Agency</option>
+							<option value="zoo">Zoo</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="input-distance" class="col-sm-2 offset-sm-2 col-form-label">Distance</label>
+					<div class="col-sm-4">
+						<input type="number" min="0" class="form-control" id="input-distance" placeholder="10">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="row">
+						<label class="col-sm-2 offset-sm-2 col-form-label req">From</label>
+						<div class="col-sm-6">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="location" id="radio-here" value="here" checked>
+								<label class="form-check-label" for="radio-here">
+									Current location
+								</label>
+							</div>							
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="location" id="radio-there" value="there">
+								<label class="form-check-label" for="radio-there">
+									Other, please specify
+								</label>
+								<br><input type="text" class="form-control" id="input-location" placeholder="Enter a location" disabled>
+								<div class="error d-none">Please enter a location</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-sm-4 offset-sm-2">
+						<button type="button" class="btn btn-secondary" id="search-button" disabled><i class="fas fa-search"></i> Search</button>
+						<button type="button" class="btn btn-light" id="clear-button">Reset</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+		<!-- <div style="text-align: center;">
+			<button class="btn btn-light btn-tgl btn-active text-center">Results</button>
+			<button class="btn btn-light btn-tgl">Favorites</button>			
+		</div> -->
+		<div class="d-flex justify-content-center">
+			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-results-content-tab" data-toggle="pill" href="#pills-results-content" role="tab" aria-controls="pills-results-content" aria-selected="true">Results</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-favorites-content-tab" data-toggle="pill" href="#pills-favorites-content" role="tab" aria-controls="pills-favorites-content" aria-selected="false">Favorites</a>
+				</li>		
+			</ul>
+		</div>
+		<div class="progress d-none">
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+		</div>
+		<div class="tab-content" id="pills-tabContent">
+			<!-- results -->
+			<div class="tab-pane fade show active" id="pills-results-content" role="tabpanel" aria-labelledby="pills-results-content-tab">
+				
+			</div>
+			
+			<!-- favorites -->
+			<div class="tab-pane fade" id="pills-favorites-content" role="tabpanel" aria-labelledby="pills-favorites-content-tab">
+				
+			</div>
+
+			<div id="details-area" class="d-none">
+				<h3 id="place-name" class="text-center"></h3>
+				<div id="button-row" class="row my-2 d-none">
+					<button id="back-button" class="btn btn-light"><i class="fas fa-chevron-left"></i> List</button>
+					<button class="btn btn-light ml-auto"><i class="far fa-star"></i></button>
+					<button id="tweet-button" class="btn ml-2" style="background: #00aced; color: #fff"><i class="fab fa-twitter"></i></button>
+				</div>
+				<ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+					<li class="nav-item ml-auto">
+						<a class="nav-link active" id="info-content-tab" data-toggle="tab" href="#info-content" role="tab" aria-controls="info-content" aria-selected="true">Info</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="photos-content-tab" data-toggle="tab" href="#photos-content" role="tab" aria-controls="photos-content" aria-selected="false">Photos</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="map-content-tab" data-toggle="tab" href="#map-content" role="tab" aria-controls="map-content" aria-selected="false">Map</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="reviews-content-tab" data-toggle="tab" href="#reviews-content" role="tab" aria-controls="reviews-content" aria-selected="false">Reviews</a>
+					</li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="info-content" role="tabpanel" aria-labelledby="info-content-tab"></div>
+					<div class="tab-pane fade" id="photos-content" role="tabpanel" aria-labelledby="photos-content-tab">
+						<div class="gallery-row d-flex">
+							<div class="gallery-column"></div>
+							<div class="gallery-column"></div>
+							<div class="gallery-column"></div>
+							<div class="gallery-column"></div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="map-content" role="tabpanel" aria-labelledby="map-content-tab">
+						<form class="form-inline mb-3">
+							<label class="sr-only" for="input-directions-from">From</label>
+							<input type="text" class="form-control mr-2" id="input-directions-from" placeholder="Your location">
+
+							<label class="sr-only" for="input-directions-to">To</label>							
+							<input type="text" class="form-control mr-2" id="input-directions-to" disabled>
+
+							<label class="sr-only" for="input-driving-mode">Travel Mode</label>							
+							<select class="form-control mr-2" id="input-driving-mode">
+								<option value="d">Driving</option>
+								<option value="b">Bicycling</option>
+								<option value="t">Transit</option>
+								<option value="w">Walking</option>								
+							</select>
+
+							<button type="button" class="btn btn-info ml-auto">Get Directions</button>
+						</form>
+
+						<div id="map" class="mb-5">
+							
+						</div>
+					</div>
+					<div class="tab-pane fade" id="reviews-content" role="tabpanel" aria-labelledby="reviews-content-tab">
+						<form class="form-inline mb-3">
+							<select id="input-review-service" class="form-control text-white bg-secondary mr-2">
+								<option value="google">Google Reviews</option>
+								<option value="yelp">Yelp Reviews</option>
+							</select>
+							<select id="input-review-sort" class="form-control text-white bg-secondary">
+								<option value="default">Default Order</option>
+								<option value="">Highest Rating</option>
+								<option value="">Lowest Rating</option>
+								<option value="">Most Recent</option>
+								<option value="">Least Recent</option>
+							</select>
+						</form>	
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+	<!-- places service: autocomplete -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUnT5veYCqFAfANzC9JnfP9loaxIMymdc&libraries=places"></script>
+
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1lLYLgXAV3QT8diQ-J2P5Av0KyErEag8" async defer></script> -->
+
+
+</body>
+
+</html>
+<script>
+    function enableSearchBtn() {
+        if(localStorage.user_latitude)
+            $("#search-button").removeAttr("disabled").removeClass("btn-secondary").addClass("btn-primary")
+    }
+
+    function disableSearchBtn() {
+        $("#search-button").attr("disabled", "disabled").removeClass("btn-primary").addClass("btn-secondary")
+    }
+
+    function isValidInput(selector) {
+        if ($(selector).val().trim() == "") {
+            $(selector).removeClass("is-valid").addClass("is-invalid").next(".error").removeClass("d-none")
+            return false
+        }
+        else {
+            $(selector).removeClass("is-invalid").addClass("is-valid").next(".error").addClass("d-none")
+            return true
+        }
+    }
+
+    function isValidForm() {
+        var status = isValidInput("#input-keyword")
+
+        if ($("#radio-there").is(":checked")) {
+            status = isValidInput("#input-location")
+        }
+
+        return status
+    }
+
+    $("#radio-here").click(() => {
+        if ($("#radio-here").is(":checked")) {
+            $("#input-location").attr("disabled", "disabled").removeClass("is-invalid").removeClass("is-valid").next(".error").addClass("d-none")
+            checkForm()
+        }
+    })
+
+    $("#radio-there").click(() => {
+        if ($("#radio-there").is(":checked")) {
+            if ($("#input-location").val().trim() == "")
+                disableSearchBtn()
+            $("#input-location").removeAttr("disabled")
+        }
+    })
+
+    function checkForm() {
+        if (isValidForm())
+            enableSearchBtn()
+        else
+            disableSearchBtn()
+    }
+
+    $("form .form-control").on("blur change keyup paste mouseup", checkForm)
+
+    $(document).ready(() => {
+        $.ajax({
+            url: "http://ip-api.com/json/",
+            method: "GET",
+            success: (data, status, xhr) => {
+                console.log(data.lat + ", " + data.lon)
+                localStorage.user_latitude = data.lat
+                localStorage.user_longitude = data.lon
+            },
+            error: (xhr, status, errorMsg) => {
+                console.log("Failed to get user location: " + errorMsg)
+            }
+        })
+    })
+
+    // autocomplete
+    autocomplete = new google.maps.places.Autocomplete($("#input-location")[0])
+
+    // nearby search
+    function nearby_search(params) {
+        $.ajax({
+            url: '/nearby',
+            method: 'GET',
+            data: params,
+            success: (data, status, xhr) => {
+                displayNearbyResults(JSON.parse(data))
+            },
+            error: (xhr, status, errorMsg) => {
+                console.log(errorMsg)
+            },
+            complete: () => {
+                $(".progress").addClass("d-none")
+            }
+        })
+    }
+
+    $("#search-button").click(() => {
+        $(".progress").removeClass("d-none")
+        if ($("#radio-here").is(":checked")) {
+            var location_type = "coords"
+            var loc = localStorage.user_latitude + "," + localStorage.user_longitude
+        }
+        else {
+            var location_type = "address"
+            var loc = $("#input-location").val()
+        }
+
+        var distance = $("#input-distance").val()
+        if (distance == "")
+            distance = 10
+
+        var params = {
+            keyword: $("#input-keyword").val(),
+            category: $("#input-category").val(),
+            distance: distance,
+            location_type: location_type,
+            loc: loc
+        }
+
+        nearby_search(params)
+    })
+
+    function displayNearbyResults(data) {
+        clr()
+
+        if (data.results.length != 0) {
+            var html = "<table class=\"table\"> \
+		<thead> \
+		<th scope=\"col\">#</th> \
+		<th scope=\"col\">Category</th> \
+		<th scope=\"col\">Name</th> \
+		<th scope=\"col\">Address</th> \
+		<th scope=\"col\">Favorite</th> \
+		<th scope=\"col\">Details</th> \
+		</thead> \
+		<tbody>"
+
+            for (var i = 0; i < data.results.length; i++) {
+                var index = i + 1
+                html += "<tr>" +
+                    "<td>" + index + "</td>" +
+                    "<td><img width=30 src='" + data.results[i].icon + "' alt='category-icon'></td>" +
+                    "<td>" + data.results[i].name + "</td>" +
+                    "<td>" + data.results[i].address + "</td>" +
+                    "<td><button class='btn btn-light' onclick=\"javascript:fav('" + data.results[i].place_id + "')\"><i class=\"far fa-star\"></i></button></td>" +
+                    "<td><button class='btn btn-light' onclick=\"javascript:getDetails('" + data.results[i].place_id + "', 'results')\"><i class=\"fas fa-chevron-right\"></i></button></td>" +
+                    "</tr>"
+            }
+
+            html += "</tbody></table>"
+
+            $("#pills-results-content").append(html)
+        }
+        else {
+            var html = `<div class="alert alert-warning" role="alert">
+		No results
+		</div>`
+
+            $("#pills-results-content").append(html)
+        }
+    }
+
+    function getDetails(place_id, fromTable) {
+
+        var request = {
+            placeId: place_id
+        }
+
+        var map = $("#map")[0]
+
+        service = new google.maps.places.PlacesService(map);
+        service.getDetails(request, (place, status) => {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                // populate map
+                var map = new google.maps.Map($("#map")[0], {
+                    center: place.geometry.location,
+                    zoom: 16
+                });
+
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                })
+
+                $("#input-directions-to").val(place.name + ", " + place.formatted_address)
+                localStorage.to_coordinates = place.geometry.location
+
+                // display stuff above tabs - place name and buttons
+                $("#place-name").text(place.name)
+                $("#button-row").removeClass("d-none")
+
+                $("#tweet-button").off("click")
+                $("#tweet-button").on("click", () => {
+                    var text = "Check out " + place.name + " located at " + place.formatted_address + ". Website: " + place.website
+                    var hashtags = "TravelAndEntertainmentSearch"
+                    window.open("https://twitter.com/intent/tweet?text=" + text + "&hashtags=" + hashtags, "_blank")
+                })
+
+                $("#back-button").off("click")
+                $("#back-button").on("click", () => {
+                    $("#place-name").text("")
+                    $("#details-area").addClass("d-none")
+                    $("#info-content").empty()
+                    $(".gallery-column").empty()
+                    $("#review-container").remove()
+                    $("#tweet-button").off("click")
+                    $("#button-row").addClass("d-none")
+
+                    // show old table
+                    $("#pills-" + fromTable + "-content").removeClass("d-none")
+                })
+
+                // populate info
+                var info_table = "<table class=\"table table-striped\"><tbody>"
+                if (place.formatted_address)
+                    info_table += "<tr><th>Address</th><td>" + place.formatted_address + "</td>"
+                if (place.international_phone_number)
+                    info_table += "<tr><th>Phone Number</th><td>" + place.international_phone_number + "</td>"
+                if (place.price_level)
+                    info_table += "<tr><th>Price Level</th><td>" + "$".repeat(place.price_level) + "</td>"
+                if (place.rating)
+                    info_table += "<tr><th>Rating</th><td>" + place.rating + "</td>"
+                if (place.url)
+                    info_table += "<tr><th>Google Page</th><td><a target='_blank' href=\"" + place.url + "\">" + place.url + "</a></td>"
+                if (place.website)
+                    info_table += "<tr><th>Website</th><td><a target='_blank' href=\"" + place.website + "\">" + place.website + "</a></td>"
+                if (place.opening_hours)
+                    info_table += "<tr><th>Hours</th><td>" + ((place.opening_hours.open_now)?"Open Now: <a>Today's Hours</a>":"Closed") + "</td>"
+
+                info_table += "</tbody></table>"
+
+                $("#info-content").html(info_table)
+
+                // populate photos
+                if (place.photos) {
+                    for (let i = 0; i < place.photos.length; i++) {
+                        var small_url = place.photos[i].getUrl({'maxWidth': 200});
+                        var full_url = place.photos[i].getUrl({'maxWidth': 2000});
+                        $(".gallery-column:eq(" + parseInt(i)%4 + ")").append("<a target='_blank' href=\"" + full_url + "\"><img src=\"" + small_url + "\"></a>")
+                    }
+                }
+                else {
+                    $("#photos-content").append(`<div class="alert alert-warning" role="alert">No results</div>`)
+                }
+
+                // populate reviews
+                reviews_html = "<div id=\"review-container\">"
+                if(place.reviews) {
+                    for (let r of place.reviews) {
+                        var card = "\
+					<div class=\"card mb-2\"> \
+					<div class=\"card-body\">\
+					<div class=\"row\">\
+					<div class=\"col-md-2\">\
+					<img width=50 src=\"" + r.profile_photo_url + "\" />\
+					</div>\
+					<div class=\"col-md-10\">\
+					<h5 class=\"card-title\"><a target='_blank' href=\"" + r.author_url + "\">" + r.author_name + "</a></h5> \
+					<h6 class=\"card-subtitle mb-2 text-muted\">" + getTimeString(new Date(parseInt(r.time) * 1000)) + "</h6> \
+					<p class=\"card-text\">" + r.text + "</p> \
+					</div>\
+					</div>\
+					</div>\
+					</div>"
+
+                        reviews_html += card
+                    }
+                }
+                else {
+                    reviews_html += `<div class="alert alert-warning" role="alert">No results</div>`
+                }
+
+                reviews_html += "</div>"
+
+                $("#reviews-content").append(reviews_html)
+
+                // hide old table
+                $("#pills-" + fromTable + "-content").addClass("d-none")
+
+                // show details area (info, photos, map, reviews)
+                $("#details-area").removeClass("d-none")
+            }
+        });
+    }
+
+    function pzero(num) {
+        return (num < 10)?'0' + num: num
+    }
+
+    function getTimeString(d) {
+        return d.getUTCFullYear() + "-" + pzero(d.getUTCMonth()) + "-" + pzero(d.getUTCDate()) + " " + pzero(d.getUTCHours()) + ":" + pzero(d.getUTCMinutes()) + ":" + pzero(d.getUTCSeconds())
+    }
+
+    $("#clear-button").click(() => {
+        clr()
+        setDefaults()
+    })
+
+    function clr() {
+        $("#pills-results-content").empty()
+        $("#pills-results-content").removeClass("d-none")
+        $("#place-name").text("")
+        $("#details-area").addClass("d-none")
+        $("#info-content").empty()
+        $(".gallery-column").empty()
+        $("#review-container").remove()
+        $("#tweet-button").off("click")
+        $("#button-row").addClass("d-none")
+        $(".alert").remove()
+    }
+
+    function setDefaults() {
+        $("#input-keyword").val("");
+        $("#input-keyword").focus();
+
+        $("#input-category").val("default");
+        $("#input-distance").val("");
+        $("input[name='location']")[0].checked = true;
+
+        $("#input-location").val("");
+        $("#input-location").attr("disabled", "disabled");
+    }
+</script>>
